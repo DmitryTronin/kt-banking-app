@@ -1,37 +1,49 @@
 package banking
 
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class BankingResponse(val success: Boolean, val message: String, val balance: Double? = null)
+
+@Serializable
+data class TransactionRequest(val amount: Double)
+
+
 class AccountActions {
     var balance: Double = 0.0
-    fun deposit(amount: Double) {
 
-        if (amount <= 0) {
-            println("Deposit unsuccessful: Invalid value. Amount deposited must be greater than zero.")
+    fun deposit(amount: Double): BankingResponse {
+        return if (amount <= 0) {
+            BankingResponse(false, "Deposit unsuccessful: Invalid value. Amount deposited must be greater than zero.")
         } else {
             try {
                 balance += amount
-                println("Deposit successful.")
+                BankingResponse(true, "Deposit successful.", balance)
             } catch (e: Exception) {
-                println ("Deposit unsuccessful: An error occurred.")
+                BankingResponse(false, "Deposit unsuccessful: An error occurred.")
             }
         }
     }
 
-    fun withdraw(amount: Double) {
-        if (amount <= 0) {
-            println("Withdrawal unsuccessful: Invalid value. Amount to withdraw must be greater than zero.")
+    /**
+    *   
+    */
+    fun withdraw(amount: Double): BankingResponse {
+        return if (amount <= 0) {
+            BankingResponse(false, "Withdrawal unsuccessful: Invalid value. Amount to withdraw must be greater than zero.")
         } else if (balance < amount) {
-            println("Withdrawal unsuccessful: Insufficient balance.")
+            BankingResponse(false, "Withdrawal unsuccessful: Insufficient balance.")
         } else {
             try {
                 balance -= amount
-                println("Withdrawal successful.")
+                BankingResponse(true, "Withdrawal successful.", balance)
             } catch (e: Exception) {
-                println("Withdrawal unsuccessful: An error occurred.")
+                BankingResponse(false, "Withdrawal unsuccessful: An error occurred.")
             }
         }
     }
-    fun displayBalance() {
-        println("Your current balance is: $balance")
-    }
     
+    fun getBalance(): BankingResponse {
+        return BankingResponse(true, "Balance retrieved successfully.", balance)
+    }
 }

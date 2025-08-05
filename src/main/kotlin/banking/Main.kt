@@ -2,6 +2,7 @@ package banking
 
 import java.util.*
 
+
 fun main() {
     val scanner = Scanner(System.`in`)
     println("Welcome to banking app")
@@ -69,18 +70,32 @@ fun main() {
             1 -> {
                 println("Enter amount to deposit: ")
                 val amount = getAmount() ?: continue
-                accActions.deposit(amount)
+                val response = accActions.deposit(amount)
+                println(response.message)
+                if (response.balance != null) {
+                    println("Your current balance is: ${response.balance}")
+                }
             }
             2 -> {
                 println("Enter amount to withdraw: ")
                 val amount = getAmount()
                 if (amount != null) {
-                    accActions.withdraw(amount)
+                    val response = accActions.withdraw(amount)
+                    println(response.message)
+                    if (response.balance != null) {
+                        println("Your current balance is: ${response.balance}")
+                    }
                 } else {
                     println("Invalid operation. Try again.")
                 }
             }
-            3 -> accActions.displayBalance()
+            3 -> {
+                val response = accActions.getBalance()
+                println(response.message)
+                if (response.balance != null) {
+                    println("Your current balance is: ${response.balance}")
+                }
+            }
             4 -> exit = true
             else -> {
                 println("Invalid operation. Try again.")
