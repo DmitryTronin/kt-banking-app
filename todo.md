@@ -1,6 +1,6 @@
 ## Fix this:
 
-1.
+1. bah
 
   ```
   Available operations:
@@ -13,3 +13,5 @@
   <<==========---> 80% EXECUTING [14s]]
   Invalid input. Please enter a number.
   ```
+
+2. wat
