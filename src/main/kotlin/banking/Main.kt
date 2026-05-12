@@ -4,6 +4,14 @@ import java.util.*
 
 fun main() {
     val scanner = Scanner(System.`in`)
+    val lightBlueBackground = "\u001B[104m"
+    val resetTerminalColors = "\u001B[0m"
+
+    print(lightBlueBackground)
+    Runtime.getRuntime().addShutdownHook(Thread {
+        print(resetTerminalColors)
+    })
+
     println("Welcome to banking app")
 
     val validUserNames = listOf("karl", "johan", "sophie", "manuel", "lucas", "emma", "liam", "noah", "mila", "lina")
@@ -81,7 +89,10 @@ fun main() {
                 }
             }
             3 -> accActions.displayBalance()
-            4 -> exit = true
+            4 -> {
+                exit = true
+                print(resetTerminalColors)
+            }
             else -> {
                 println("Invalid operation. Try again.")
             }
