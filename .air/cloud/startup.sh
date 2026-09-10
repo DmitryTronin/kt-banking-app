@@ -14,6 +14,15 @@ fi
 export GRADLE_USER_HOME="${GRADLE_USER_HOME:-$HOME/.gradle}"
 mkdir -p "$GRADLE_USER_HOME"
 
+if [[ -n "${HTTPS_PROXY:-${HTTP_PROXY:-}}" ]]; then
+  proxy_url="${HTTPS_PROXY:-${HTTP_PROXY}}"
+  proxy_host="${proxy_url#http://}"
+  proxy_host="${proxy_host#https://}"
+  proxy_host="${proxy_host%%:*}"
+  proxy_port="${proxy_url##*:}"
+  export GRADLE_OPTS="${GRADLE_OPTS:-} -Dhttps.proxyHost=$proxy_host -Dhttps.proxyPort=$proxy_port -Dhttp.proxyHost=$proxy_host -Dhttp.proxyPort=$proxy_port"
+fi
+
 PROFILE_FILE=
 for candidate in "$HOME/.bash_profile" "$HOME/.bash_login" "$HOME/.profile"; do
   if [[ -f "$candidate" ]]; then
