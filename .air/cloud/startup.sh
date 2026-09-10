@@ -51,10 +51,10 @@ done
 
 chmod +x ./gradlew
 log 'Resolving dependencies and compiling the application'
-./gradlew --no-daemon test build
+./gradlew -Pkotlin.jvm.target.validation.mode=warning --no-daemon test build
 
 log 'Starting Ktor server on port 8080'
-nohup ./gradlew --no-daemon run > /tmp/kt-banking-app.log 2>&1 &
+nohup ./gradlew -Pkotlin.jvm.target.validation.mode=warning --no-daemon run > /tmp/kt-banking-app.log 2>&1 &
 SERVER_PID=$!
 printf '%s\n' "$SERVER_PID" > /tmp/kt-banking-app.pid
 
