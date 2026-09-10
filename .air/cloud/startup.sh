@@ -14,6 +14,23 @@ fi
 export GRADLE_USER_HOME="${GRADLE_USER_HOME:-$HOME/.gradle}"
 mkdir -p "$GRADLE_USER_HOME"
 
+JDK_DIR="$HOME/.cache/kt-banking-app/jdk-21"
+if [[ ! -x "$JDK_DIR/bin/java" ]]; then
+  log 'Installing Temurin JDK 21 in the user cache'
+  mkdir -p "$HOME/.cache/kt-banking-app"
+  jdk_archive="$HOME/.cache/kt-banking-app/temurin-21.tar.gz"
+  curl --fail --location --silent --show-error \
+    'https://api.adoptium.net/v3/binary/latest/21/ga/linux/x64/jdk/hotspot/normal/eclipse' \
+    -o "$jdk_archive"
+  rm -rf "$HOME/.cache/kt-banking-app/jdk-extract"
+  mkdir -p "$HOME/.cache/kt-banking-app/jdk-extract"
+  tar -xzf "$jdk_archive" -C "$HOME/.cache/kt-banking-app/jdk-extract"
+  extracted_jdk=$(find "$HOME/.cache/kt-banking-app/jdk-extract" -mindepth 1 -maxdepth 1 -type d | head -1)
+  mv "$extracted_jdk" "$JDK_DIR"
+fi
+export JAVA_HOME="$JDK_DIR"
+export PATH="$JAVA_HOME/bin:$PATH"
+
 if [[ -n "${HTTPS_PROXY:-${HTTP_PROXY:-}}" ]]; then
   proxy_url="${HTTPS_PROXY:-${HTTP_PROXY}}"
   proxy_host="${proxy_url#http://}"
